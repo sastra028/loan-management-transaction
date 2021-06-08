@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.loanmanagement.transaction.constant.TransactionStatus;
 import com.loanmanagement.transaction.entity.TransactionEntity;
 import com.loanmanagement.transaction.entity.TransactionLogEntity;
 import com.loanmanagement.transaction.model.CommonResponse;
@@ -28,6 +29,9 @@ public class TransactionService {
 
 	@Autowired
 	private TransactionLogRepository transactionLogRepository;
+
+	@Autowired
+	private TransactionDetailService transactionDetailService;
 
 	public List<TransactionResponst> findAllTransaction() {
 		return mapEntityToResponse(transactionRepository.findAll());
@@ -59,9 +63,12 @@ public class TransactionService {
 			transactionEntity.setTransactionNo(ConvertUtils.genKey("T"));
 			transactionEntity.setCreateDate(new Date());
 			transactionEntity.setUpdateDate(new Date());
-			transactionEntity.setStatus("process");
+			transactionEntity.setStatus(TransactionStatus.BORROWING.getCode());
 			transactionRepository.save(transactionEntity);
 			transactionLog(transactionEntity, "create");
+			
+			transactionDetailService.create(transactionEntity);
+			
 			commonResponse.setStatus("success");
 		} else {
 			commonResponse.setStatus("fail (request has transaction no)");
@@ -148,6 +155,9 @@ public class TransactionService {
 			transactionResponst
 					.setCreateDate(ConvertUtils.dateToString(transactionEntity.getCreateDate(), "dd/MM/yyyy"));
 			transactionResponst.setCreateBy(transactionEntity.getCreateBy());
+
+			transactionDetailService.calTransactionDetail(transactionResponst);
+
 			transactionResponstList.add(transactionResponst);
 		}
 		return transactionResponstList;

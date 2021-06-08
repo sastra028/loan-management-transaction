@@ -16,6 +16,10 @@ public class TransactionResponst {
 	private String updateBy;
 	private String createDate;
 	private String createBy;
+	private String paid;
+	private String fine;
+	private String interest;
+	private String principle;
 
 	public String getTransactionNo() {
 		return transactionNo;
@@ -135,6 +139,38 @@ public class TransactionResponst {
 
 	public void setCreateBy(String createBy) {
 		this.createBy = createBy;
+	}
+
+	public String getPaid() {
+		return paid;
+	}
+
+	public void setPaid(String paid) {
+		this.paid = paid;
+	}
+
+	public String getFine() {
+		return fine;
+	}
+
+	public void setFine(String fine) {
+		this.fine = fine;
+	}
+
+	public String getInterest() {
+		return interest;
+	}
+
+	public void setInterest(String interest) {
+		this.interest = interest;
+	}
+
+	public String getPrinciple() {
+		return principle;
+	}
+
+	public void setPrinciple(String principle) {
+		this.principle = principle;
 	}
 
 }
